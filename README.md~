@@ -1,0 +1,10 @@
+# CatchAdmin 安装器
+
+- 支持 Laravel， thinkphp，webman 版本安装
+```composer log
+catch new catchadmin
+```
+- 支持安装专业版
+```shell
+catch pro catchadmin-pro
+```
