@@ -100,7 +100,7 @@ class NewCommand extends Command
             default: 0
         );
 
-        $isUserMirror = confirm("是否使用镜像?", default: false, yes: 'No');
+        $isUserMirror = confirm("是否使用 Composer 镜像?", default: false, yes: 'Y', no: 'N');
         if ($isUserMirror) {
             $this->mirror = \Laravel\Prompts\select(
                 label: '请选择镜像',
