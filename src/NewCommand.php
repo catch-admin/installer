@@ -96,7 +96,11 @@ class NewCommand extends Command
 
         $this->version = \Laravel\Prompts\select(
             label: '请选择版本',
-            options:  ['laravel', 'webman', 'thinkphp'],
+            options:  [
+                'laravel',
+                //'webman',
+                //'thinkphp'
+            ],
             default: 0
         );
 
@@ -173,7 +177,7 @@ class NewCommand extends Command
         }
 
         $repoUrl = $this->getOpensourceProject($this->version);
-        $createProjectCommand = "git clone {$repoUrl} \"$directory\"";
+        $createProjectCommand = "git clone -b v5 --single-branch {$repoUrl} \"$directory\"";
 
         $commands = [
             $createProjectCommand,
@@ -219,7 +223,9 @@ class NewCommand extends Command
         }
 
         if (($process = $this->runCommands($commands, $input, $output))->isSuccessful()) {
-            @shell_exec("cd {$directory}");
+            $output->writeln('<fg=blue> 下载前端项目 ' . PHP_EOL);
+
+            @shell_exec("cd {$directory} && " . $this->cloneWeb());
 
             $startBin = $this->version == 'laravel' ? 'artisan' : ($this->version == 'webman' ? 'webman' : 'think');
 
@@ -241,9 +247,20 @@ class NewCommand extends Command
     {
         return [
             'laravel' => 'https://gitee.com/catchadmin/catchAdmin.git',
-            'webman' => 'https://gitee.com/catchadmin/catchadmin-webman.git',
-            'thinkphp' => 'https://gitee.com/catchadmin/catchadmin-tp.git',
+            //'webman' => 'https://gitee.com/catchadmin/catchadmin-webman.git',
+            //'thinkphp' => 'https://gitee.com/catchadmin/catchadmin-tp.git',
         ][$version];
+    }
+
+    public function getFrontProject(): string
+    {
+        return 'https://gitee.com/catchadmin/catch-admin-vue';
+    }
+
+
+    public function cloneWeb(): string
+    {
+        return "git clone -b v5 --single-branch {$this->getFrontProject()} web";
     }
 
     /**
